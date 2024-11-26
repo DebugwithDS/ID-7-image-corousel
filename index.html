@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Centered Image Carousel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background:  #0d1117;
+      display: flex;
+      width: 80%;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .carousel-container {
+      width: 700px;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      perspective: 1200px;
+    }
+
+    .carousel {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1s ease-in-out;
+    }
+    .carousel-item {
+      width: 60%; 
+      height: 70%;
+      position: absolute;
+      top: 50%;
+      left: 22%;
+      transform: translate(-50%, -50%);
+      background-size: cover;
+      background-position: center;
+      border-radius: 15px;
+      opacity: 0.8;
+      box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5), -10px -10px 20px rgba(255, 255, 255, 0.1);
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+
+    .carousel-item.active {
+      transform: translate(-50%, -50%) scale(1.2);
+      opacity: 1;
+      border: 2px solid red;
+      box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.7), -10px -10px 60px rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 75%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #ffffff;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 10;
+      width: 50px;
+      border: 2px solid skyblue;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .prev-btn {
+      left: -60px;
+    }
+
+    .next-btn {
+      right: -60px;
+    }
+  </style>
+</head>
+<body>
+  <div class="carousel-container">
+    <div class="carousel">
+      <div class="carousel-item active" style="background-image: url('../images/WALL1.png');"></div>
+      <div class="carousel-item" style="background-image: url('../images/wall2.png');"></div>
+      <div class="carousel-item" style="background-image: url('../images/wall3.png');"></div>
+      <div class="carousel-item" style="background-image: url('../images/wall4.png');"></div>
+      <div class="carousel-item" style="background-image: url('../images/girl.png');"></div>
+    </div>
+    <button class="nav-btn prev-btn">&lt;</button>
+    <button class="nav-btn next-btn">&gt;</button>
+  </div>
+  <script>
+    const carousel = document.querySelector(".carousel");
+    const items = document.querySelectorAll(".carousel-item");
+    const prevBtn = document.querySelector(".prev-btn");
+    const nextBtn = document.querySelector(".next-btn");
+    let currentIndex = 0;
+
+    function updateCarousel() {
+      items.forEach((item, index) => {
+        const offset = index - currentIndex;
+        item.style.transform = `translateX(${offset * 100}%) translateZ(${Math.abs(offset) * -200}px)`;
+        item.style.opacity = offset === 0 ? "1" : "0.5";
+        item.classList.toggle("active", offset === 0);
+      });
+    }
+
+    prevBtn.addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + items.length) % items.length;
+      updateCarousel();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % items.length;
+      updateCarousel();
+    });
+
+    updateCarousel();
+  </script>
+</body>
+</html>
